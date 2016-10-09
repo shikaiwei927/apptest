@@ -1,25 +1,22 @@
-package com.shichao.task;
-
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.remote.CapabilityType;
-import org.openqa.selenium.remote.DesiredCapabilities;
- 
-
-
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
-
-import io.appium.java_client.android.AndroidDriver;
+package com.shikai.task;
 
 import java.io.File;
 import java.net.URL;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.AndroidElement;
+import io.appium.java_client.remote.MobileCapabilityType;
  
 public class TaskKey {
-    private  AndroidDriver  driver;
+    private  AndroidDriver<AndroidElement>  driver;
  
     @BeforeMethod(alwaysRun=true)
     public void setUp() throws Exception {
@@ -28,15 +25,15 @@ public class TaskKey {
         File appDir = new File(classpathRoot, "apps");
         File app = new File(appDir, "app-debug.apk");
         DesiredCapabilities capabilities = new DesiredCapabilities();
-        capabilities.setCapability(CapabilityType.BROWSER_NAME, "");
-        capabilities.setCapability("platformName", "Android");
-        //capabilities.setCapability("deviceName","Mi-4c");
-        capabilities.setCapability("deviceName","SCL-TL00H");
-        capabilities.setCapability("platformVersion", "5.1");
-        capabilities.setCapability("app", app.getAbsolutePath());
+
+        capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME,"Android");
+        capabilities.setCapability(MobileCapabilityType.UDID, "JTJ4C15A15012272");//devices ID
+        capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, "SCL-TL00H"); // 真机名字
+        capabilities.setCapability(MobileCapabilityType.PLATFORM_VERSION, "5.1"); //真机版本
+        capabilities.setCapability(MobileCapabilityType.APP, app.getAbsolutePath()); //对应的被测APK文件路径
         capabilities.setCapability("appPackage", "com.d3tech.smartgateway");
         capabilities.setCapability("appActivity", "com.d3tech.smartgateway.activity.WelcomeActivity");
-    	driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+    	driver = new AndroidDriver<AndroidElement>(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
  
@@ -52,8 +49,8 @@ public class TaskKey {
     public void addContact(){
     	//WebElement el = driver.findElement(By.id("com.d3tech.smartgateway:id/joker_dialog_button_left"));
         //el.click();
-        List<WebElement> textFieldsList = driver.findElements(By.id("com.d3tech.smartgateway:id/sk_text_gateway_name"));
-        for(WebElement textfield:textFieldsList){
+        List<AndroidElement> textFieldsList = driver.findElements(By.id("com.d3tech.smartgateway:id/sk_text_gateway_name"));
+        for(AndroidElement textfield:textFieldsList){
         	String temp=textfield.getText();
         	System.out.println(temp);
         	if(temp.equals("智能网关2009")){
@@ -62,8 +59,8 @@ public class TaskKey {
         	}
         }
         	
-        List<WebElement> textkeyList = driver.findElementsByClassName("android.widget.TextView");
-		for(WebElement textkey:textkeyList){
+        List<AndroidElement> textkeyList = driver.findElementsByClassName("android.widget.TextView");
+		for(AndroidElement textkey:textkeyList){
 		 	if(textkey.getText().equals("那把银白色的")){
 		 		textkey.click();
 		 		break;
